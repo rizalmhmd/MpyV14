@@ -1,55 +1,33 @@
-/*const { tiktokdl, tiktokdlv2 } = require('@bochilteam/scraper')
-let handler = async (m, { conn, args, usedPrefix, command }) => {
-    if (!args[0]) throw `Use example ${usedPrefix}${command} https://www.tiktok.com/@omagadsus/video/7025456384175017243`
-    const { author: { nickname }, video, description } = await tiktokdl(args[0]).catch(async _ => await tiktokdlv2(args[0]))
-    const url = video.no_watermark || video.no_watermark_hd || video.with_watermark || video.no_watermark_raw
-    if (!url) throw 'Can\'t download video!'
-    conn.sendFile(m.chat, url, 'tiktok.mp4', `
-🔗 *Url:* ${url}
-🧏 *Nickname:* ${nickname}${description ? `🖹 *Description:* ${description}` : ''}
-`.trim(), m)
+import fetch from 'node-fetch'
+
+let handler = async (m, { conn, text, usedPrefix }) => {
+	if (!text) throw 'Input URL' 
+	if (!/(?:https:?\/{2})?(?:w{3}|vm|vt|t)?\.?tiktok.com\/([^\s&]+)/gi.test(text)) throw 'Invalid URL'
+	let url = (await fetch(text)).url
+	let res = await (await fetch(`https://api2.musical.ly/aweme/v1/aweme/detail/?aweme_id=${url.split('?')[0].split('/')[5]}`)).json()
+	let data = res.aweme_detail.video.play_addr.url_list
+	if (!data.length) throw 'Can\'t download video!'
+	let meta = await getInfo(url).catch(_ => {})
+	await m.reply('_In progress, please wait..._')
+	let buttons = [{ buttonText: { displayText: 'Audio' }, buttonId: `${usedPrefix}tomp3` }]
+	conn.sendMessage(m.chat, { video: { url: data[data.length - 1] }, caption: meta?.description || null, footer: await shortUrl(data[data.length - 1]), buttons }, { quoted: m })
+	// conn.sendMessage(m.chat, { video : { url: res.link }, caption: description }, { quoted: m })
 }
-handler.help = ['tiktok'].map(v => v + ' <url>')
+handler.help = ['tiktok']
 handler.tags = ['downloader']
-
-handler.command = /^(tik(tok)?(dl)?)$/i
-
-module.exports = handler*/
-
-
-const hxz = require("hxz-api")
-let handler = async(m, { conn, args, usedPrefix, command }) => {
-if (!args[0]) throw `*Perintah ini untuk mengunduh video tiktok dengan link*\n\ncontoh:\n${usedPrefix + command} https://vm.tiktok.com/ZGJAmhSrp/`
-if (!args[0].match(/tiktok/gi)) throw `*Link salah! Perintah ini untuk mengunduh video tiktok dengan link*\n\ncontoh:\n${usedPrefix + command} https://vm.tiktok.com/ZGJAmhSrp/`
-let p = await  hxz.ttdownloader(args[0])
-const { nowm, wm, audio } = p
-// made by arietube
- conn.sendFile(m.chat, nowm, 'tiktok.mp4', `*${global.wm}*`, m)
-}
-handler.help = ['tiktok'].map(v => v + ' <url>')
-handler.tags = ['downloader']
-handler.command = /^(tiktok|tiktokdl)$/i
-handler.limit = true
+handler.alias = ['tiktok', 'tikdl', 'tiktokdl', 'tiktoknowm']
+handler.command = /^(tt|tiktok)(dl|nowm)?$/i
 handler.group = true
-module.exports = handler
 
-/*
-const { tiktokdl, tiktokdlv2 } = require('@bochilteam/scraper')
-let handler = async (m, { conn, args, usedPrefix, command }) => {
-    if (!args[0]) throw `*Perintah ini untuk mengunduh video tiktok dengan link*\n\ncontoh:\n${usedPrefix + command} https://vm.tiktok.com/ZGJAmhSrp/`
-    if (!args[0].match(/tiktok/gi)) throw `*Link salah! Perintah ini untuk mengunduh video tiktok dengan link*\n\ncontoh:\n${usedPrefix + command} https://vm.tiktok.com/ZGJAmhSrp/`
-    const { author: { nickname }, video, description } = await tiktokdl(args[0]).catch(async _ => await tiktokdlv2(args[0]))
-    const url = video.no_watermark || video.no_watermark_hd || video.with_watermark || video.no_watermark_raw
-    if (!url) throw 'Can\'t download video!'
-    m.reply('Sedang diproses...')
-    conn.sendFile(m.chat, url, 'tiktok.mp4', `*© Arietube*
-`.trim(), m)
+export default handler
+
+async function getInfo(url) {
+	// url = (await fetch(url)).url
+	let id = url.split('?')[0].split('/')
+	let res = await (await fetch(`https://www.tiktok.com/node/share/video/${id[3]}/${id[5]}/`)).json()
+	return res?.seoProps?.metaParams
 }
-handler.help = ['tiktok <url>']
-handler.tags = ['downloader']
 
-handler.command = /^(tik|tt|tiktok)$/i
-
-module.exports = handler
-*/
-
+async function shortUrl(url) {
+	return await (await fetch(`https://tinyurl.com/api-create.php?url=${url}`)).text()
+}
