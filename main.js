@@ -168,7 +168,7 @@ global.reloadHandler = function (restatConn) {
   }
 
   conn.welcome = '*HAI*, @user!\n\n*WELCOME TO GC* @subject\n\n*-----------------KARTU INTRO-----------------*\n*┏━━━━━━꧁۝☆ꦿ⃔¤۝꧂━━━━━┓*\n*╠➣NAMA :*\n*╠➣UMUR :*\n*╠➣KELAS :*\n*╠➣JNS KELAMIN :*\n*╠➣ASKOT :*\n*╠➣HOBI :*\n*╠➣AGAMA :*\n*┗━━━━━━꧁۝☆ꦿ⃔¤۝꧂━━━━━┛*' 
-  conn.bye = '@user 𝙆𝙀𝙇𝙐𝘼𝙍 𝘿𝘼𝙍𝙄 Group'
+  conn.bye = '@user 𝙆𝙀𝙇𝙐𝘼𝙍 𝘿𝘼𝙍𝙄 𝙂𝙍𝙊𝙐𝙋'
   conn.spromote = '@user sekarang admin!'
   conn.sdemote = '@user sekarang bukan admin!'
   conn.handler = handler.handler.bind(conn)
