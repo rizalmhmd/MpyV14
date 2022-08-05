@@ -5,7 +5,7 @@ let res = await fetch(`https://api.lolhuman.xyz/api/tiktokmusic?apikey=${lolkey}
 if (!res.ok) throw await res.text()
 let json = await res.json()
 if (!json.status) throw json
-await conn.sendFile(m.chat, link, 'tt.audio', m)
+await conn.sendFile(m.chat, url, 'tt.audio', m)
 }
 
 handler.help = ['tiktokmp3 <url>']
