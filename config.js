@@ -25,7 +25,8 @@ global.APIs = { // API Prefix
   LeysCoder: 'https://leyscoders-api.herokuapp.com',
   restapi: 'https://x-restapi.herokuapp.com',
   alphabot: 'https://api-alphabot.herokuapp.com',
-  males: 'https://malest.herokuapp.com'
+  males: 'https://malest.herokuapp.com',
+  lolhuman : 'https://api.lolhuman.xyz',
 }
 global.APIKeys = { // APIKey Here
   // 'https://website': 'apikey'
@@ -36,9 +37,14 @@ global.APIKeys = { // APIKey Here
   'https://melcanz.com': 'ZZBk7EBb',
   'https://leyscoders-api.herokuapp.com': 'dappakntlll',
   'https://x-restapi.herokuapp.com': 'BETA',
-  'https://api-alphabot.herokuapp.com': 'N7axnIq3'
+  'https://api-alphabot.herokuapp.com': 'N7axnIq3',
+  'https://api.lolhuman.xyz' : 'azzbot'
 }
 
+lolkey = 'azzbot'
+zekskey = 'apivinz'
+xteamkey = '524e9d1f64f72f79'
+//xteam        MIMINETBOT
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0
 
 const spack = fs.readFileSync("lib/exif.json")
